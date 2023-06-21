@@ -1,8 +1,16 @@
 public class SearchInDuplicatesRotatedSortedArray {
 
     public static void main(String[] args) {
-        int[] arr = {2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 9, 2, 2, 2, 2, 2, 2, 2, 2, 2};
-        System.out.println(searchInRotatedArray(arr, 9));
+        int[] arr = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1};
+        System.out.println(search(arr, 1));
+    }
+
+    static boolean search(int[] nums, int target) {
+        int ans = searchInRotatedArray(nums, target);
+        if (ans == -1) {
+            return false;
+        }
+        return true;
     }
 
     static int searchInRotatedArray(int[] arr, int target) {
@@ -23,11 +31,6 @@ public class SearchInDuplicatesRotatedSortedArray {
     static int findPivot(int[] arr) {
         int start = 0;
         int end = arr.length - 1;
-        while (arr[start] == arr[end] && start != end) {
-            start++;
-            end--;
-        }
-        System.out.println(start + " end:" + end);
         while (start < end) {
             int mid = start + (end - start) / 2;
             if (mid < end && arr[mid] > arr[mid + 1]) {
@@ -36,8 +39,17 @@ public class SearchInDuplicatesRotatedSortedArray {
                 return mid - 1;
             } else if (arr[mid] > arr[start]) {
                 start = mid + 1;
-            } else {
+            } else if (arr[mid] < arr[end]) {
                 end = mid - 1;
+            } else if (arr[start] == arr[mid] && arr[end] == arr[mid]) {
+                if (arr[start] < arr[start + 1]) {
+                    return start;
+                } else {
+                    start++;
+                    end--;
+                }
+            } else if (arr[start] < arr[end]) {
+                return end;
             }
         }
         return -1;
