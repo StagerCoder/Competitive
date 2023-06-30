@@ -1,25 +1,30 @@
+import java.util.ArrayList;
+import java.util.List;
+
 public class NQueens {
     public static void main(String[] args) {
         boolean[][] arr = new boolean[5][5];
-        System.out.println(placeNQueens(arr, 0));
+        List<List<String>> ans = placeNQueens(arr, 0);
+        System.out.println(ans.size());
     }
 
-    static int placeNQueens(boolean[][] arr, int row) {
+    static List<List<String>> placeNQueens(boolean[][] arr, int row) {
+        List<List<String>> queen = new ArrayList<>();
         if (row == arr.length) {
+            queen.add(makeQueenArr(arr));
             displayArr(arr);
             System.out.println();
-            return 1;
+            return queen;
         }
 
-        int count = 0;
-        for (int col = 0; col < arr[0].length; col++) {
+        for (int col = 0; col < arr.length; col++) {
             if (isSafe(arr, row, col)) {
                 arr[row][col] = true;
-                count += placeNQueens(arr, row + 1);
+                queen.addAll(placeNQueens(arr, row + 1));
                 arr[row][col] = false;
             }
         }
-        return count;
+        return queen;
     }
 
     private static void displayArr(boolean[][] arr) {
@@ -33,6 +38,22 @@ public class NQueens {
             }
             System.out.println();
         }
+    }
+
+    private static List<String> makeQueenArr(boolean[][] arr) {
+        List<String> ans = new ArrayList<>();
+        for (boolean[] row : arr) {
+            StringBuilder s = new StringBuilder();
+            for (boolean element : row) {
+                if (element) {
+                    s.append("Q");
+                } else {
+                    s.append(".");
+                }
+            }
+            ans.add(s.toString());
+        }
+        return ans;
     }
 
     static boolean isSafe(boolean[][] arr, int row, int col) {
@@ -51,7 +72,7 @@ public class NQueens {
         }
         int maxRight = Math.min(row, arr.length - col - 1);
         for (int i = 1; i <= maxRight; i++) {
-            if (arr[row - 1][col + 1]) {
+            if (arr[row - i][col + i]) {
                 return false;
             }
         }
