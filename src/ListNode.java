@@ -15,6 +15,10 @@ public class ListNode {
         this.next = next;
     }
 
+    @Override
+    public String toString() {
+        return "Value: " + val + " Next: " + next.val;
+    }
 
     static void displayListNode(ListNode node) {
         System.out.println();
